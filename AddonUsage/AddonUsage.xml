@@ -3,7 +3,7 @@
 
 	<!-- primary frame -->
 	<Frame name="AddonUsage" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" frameStrata="HIGH" hidden="true">
-		<Size x="320" y="375"/>
+		<Size x="415" y="375"/>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
@@ -112,7 +112,7 @@
 			</Button>
 			
 			<Button name="$parentSortMemory" parentKey="sortMemory" text="Memory" id="2">
-				<Size x="90" y="19"/>
+				<Size x="130" y="19"/>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parentSortAddon" relativePoint="TOPRIGHT"/>
 				</Anchors>
@@ -163,7 +163,7 @@
 			</Button>
 			
 			<Button name="$parentSortCPU" parentKey="sortCPU" text="CPU" id="4">
-				<Size x="56" y="19"/>
+				<Size x="130" y="19"/>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parentSortMemory" relativePoint="TOPRIGHT"/>
 				</Anchors>

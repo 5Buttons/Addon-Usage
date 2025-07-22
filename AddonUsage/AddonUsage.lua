@@ -104,23 +104,22 @@ function au:InitializeFrame()
         else
             button:SetPoint("TOPLEFT", buttons[i-1], "BOTTOMLEFT", 0, -2)
         end
-button.name = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        button.name = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         button.name:SetPoint("LEFT", 2, 0)
         button.name:SetJustifyH("LEFT")
-        button.name:SetWidth(130) -- Increased from 108    
+        button.name:SetWidth(130) -- Increased addon name width
         button.mem = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         button.mem:SetPoint("LEFT", button.name, "RIGHT", 0, 0)
         button.mem:SetJustifyH("RIGHT")
-        button.mem:SetWidth(50)     
+        button.mem:SetWidth(60) -- Increased to match memory column button width
         button.memPercent = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         button.memPercent:SetPoint("LEFT", button.mem, "RIGHT", 5, 0)
         button.memPercent:SetJustifyH("LEFT")
-        button.memPercent:SetWidth(30)     
+        button.memPercent:SetWidth(65) -- Adjusted for new layout
         button.cpu = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         button.cpu:SetPoint("LEFT", button.memPercent, "RIGHT", 0, 0)
         button.cpu:SetJustifyH("RIGHT")
-        button.cpu:SetWidth(54) -- Increased from 34
-        -- Add highlight texture
+        button.cpu:SetWidth(108) -- Reduced by ~10% from 120
         local highlight = button:CreateTexture(nil, "HIGHLIGHT")
         highlight:SetAllPoints(true)
         highlight:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
@@ -168,12 +167,12 @@ function au.CheckOnClick(self)
             whileDead = 1, 
             showAlert = enable,
             OnAccept = function() 
-                SetCVar("scriptProfile", enable and "1" or "0") 
-                ReloadUI() 
+                SetCVar("scriptProfile", enable and "1" or "0")
+                ReloadUI()
             end,
             OnCancel = function() 
                 au.profilingCheckButton:Enable() 
-                au.profilingCheckButton:SetChecked(not enable) 
+                au.profilingCheckButton:SetChecked(not enable)
             end
         }
         au.profilingCheckButton:Disable()
@@ -202,20 +201,20 @@ function au:UpdateList()
     local offset = FauxScrollFrame_GetOffset(self.scrollFrame)
     for i = 1, MAX_ADDONS_DISPLAY do
         local index = i + offset
-        local button = self.buttons[i]    
+        local button = self.buttons[i]
         if index <= #self.list then
             local addon = self.list[index]
             button.name:SetText(addon[1])
             -- Convert KB to MB by dividing by 1024
             button.mem:SetText(format("%.2fMB", addon[2] / 1024))
-            button.memPercent:SetText(format("%d%%", addon[3]))
+            button.memPercent:SetText(format("(%d%%)", addon[3]))
             if self.profiling then
-                -- Display raw CPU time in milliseconds instead of percentage
-                button.cpu:SetText(format("%.1fms", addon[4] or 0))
+                -- Display both CPU time in milliseconds and percentage
+                button.cpu:SetText(format("%.1fms (%d%%)", addon[4] or 0, addon[5] or 0))
                 button.cpu:Show()
             else
                 button.cpu:Hide()
-            end      
+            end
             button:Show()
         else
             button:Hide()
