@@ -1,6 +1,7 @@
 ## Addon-Usage
 
 Displays addon memory/cpu usage. 3.3.5a backport of version 2.0.2 of this addon: https://www.curseforge.com/wow/addons/addon-usage
+Use it with ```/addonusage``` or ```/usage```
 
 
 ## Important: 
