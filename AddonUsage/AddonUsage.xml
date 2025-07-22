@@ -1,0 +1,297 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+	<!-- primary frame -->
+	<Frame name="AddonUsage" parent="UIParent" enableMouse="true" movable="true" clampedToScreen="true" frameStrata="HIGH" hidden="true">
+		<Size x="320" y="375"/>
+		<Anchors>
+			<Anchor point="CENTER"/>
+		</Anchors>
+		<!-- Use backdrop settings appropriate for 3.3.5a -->
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="11" right="11" top="12" bottom="11"/>
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="32"/>
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture name="$parentPortrait" parentKey="portrait">
+					<Size x="60" y="60"/>
+					<Anchors>
+						<Anchor point="TOPLEFT" x="-5" y="7"/>
+					</Anchors>
+				</Texture>
+				<FontString name="$parentTitle" parentKey="title" text="Addon Usage" inherits="GameFontNormal">
+					<Anchors>
+						<Anchor point="TOP" x="0" y="-16"/>
+					</Anchors>
+				</FontString>
+				<!-- Background for sort buttons -->
+				<Texture file="Interface\AuctionFrame\UI-AuctionPost-Background" horizTile="true">
+					<Anchors>
+						<Anchor point="TOPLEFT" x="8" y="-64"/>
+						<Anchor point="BOTTOMRIGHT" relativePoint="TOPRIGHT" x="-26" y="-84"/>
+					</Anchors>
+					<TexCoords left="0" right="1" top="0.25" bottom="0.75" />
+					<Color r="0.75" g="0.75" b="0.75" />
+				</Texture>
+			</Layer>
+		</Layers>
+
+		<Frames>
+
+<!-- Update the ScrollFrame with correct function reference -->
+<ScrollFrame name="$parentScrollFrame" parentKey="scrollFrame" inherits="FauxScrollFrameTemplate">
+    <Anchors>
+        <Anchor point="TOPLEFT" x="10" y="-86"/>
+        <Anchor point="BOTTOMRIGHT" x="-30" y="30"/>
+    </Anchors>
+    <Scripts>
+        <OnVerticalScroll>
+            FauxScrollFrame_OnVerticalScroll(self, offset, 16, AddonUsageScrollFrame_Update);
+        </OnVerticalScroll>
+    </Scripts>
+</ScrollFrame>
+			
+			<!-- Sort buttons heading each column -->
+			<Button name="$parentSortAddon" parentKey="sortAddon" text="Addon" id="1">
+				<Size x="130" y="19"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" x="8" y="-64"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture name="$parentLeft" file="Interface\FriendsFrame\WhoFrame-ColumnTabs">
+							<Size x="5" y="19"/>
+							<Anchors>
+								<Anchor point="TOPLEFT"/>
+							</Anchors>
+							<TexCoords left="0" right="0.078125" top="0" bottom="0.59375"/>
+						</Texture>
+						<Texture name="$parentRight" file="Interface\FriendsFrame\WhoFrame-ColumnTabs">
+							<Size x="4" y="19"/>
+							<Anchors>
+								<Anchor point="TOPRIGHT"/>
+							</Anchors>
+							<TexCoords left="0.90625" right="0.96875" top="0" bottom="0.59375"/>
+						</Texture>
+						<Texture file="Interface\FriendsFrame\WhoFrame-ColumnTabs">
+							<Size x="10" y="19"/>
+							<Anchors>
+								<Anchor point="LEFT" relativeTo="$parentLeft" relativePoint="RIGHT"/>
+								<Anchor point="RIGHT" relativeTo="$parentRight" relativePoint="LEFT"/>
+							</Anchors>
+							<TexCoords left="0.078125" right="0.90625" top="0" bottom="0.59375"/>
+						</Texture>
+					</Layer>
+				</Layers>
+				<ButtonText name="$parentText">
+					<Anchors>
+						<Anchor point="LEFT" x="7" y="0"/>
+					</Anchors>
+				</ButtonText>
+				<NormalFont style="GameFontHighlightSmall"/>
+				<HighlightTexture file="Interface\PaperDollInfoFrame\UI-Character-Tab-Highlight" alphaMode="ADD">
+					<Size x="5" y="24"/>
+					<Anchors>
+						<Anchor point="LEFT"/>
+						<Anchor point="RIGHT" x="4" y="0"/>
+					</Anchors>
+				</HighlightTexture>
+				<Scripts>
+					<OnClick>
+						AddonUsage.SortOnClick(self)
+					</OnClick>
+				</Scripts>
+			</Button>
+			
+			<Button name="$parentSortMemory" parentKey="sortMemory" text="Memory" id="2">
+				<Size x="90" y="19"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentSortAddon" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture name="$parentLeft" file="Interface\FriendsFrame\WhoFrame-ColumnTabs">
+							<Size x="5" y="19"/>
+							<Anchors>
+								<Anchor point="TOPLEFT"/>
+							</Anchors>
+							<TexCoords left="0" right="0.078125" top="0" bottom="0.59375"/>
+						</Texture>
+						<Texture name="$parentRight" file="Interface\FriendsFrame\WhoFrame-ColumnTabs">
+							<Size x="4" y="19"/>
+							<Anchors>
+								<Anchor point="TOPRIGHT"/>
+							</Anchors>
+							<TexCoords left="0.90625" right="0.96875" top="0" bottom="0.59375"/>
+						</Texture>
+						<Texture file="Interface\FriendsFrame\WhoFrame-ColumnTabs">
+							<Size x="10" y="19"/>
+							<Anchors>
+								<Anchor point="LEFT" relativeTo="$parentLeft" relativePoint="RIGHT"/>
+								<Anchor point="RIGHT" relativeTo="$parentRight" relativePoint="LEFT"/>
+							</Anchors>
+							<TexCoords left="0.078125" right="0.90625" top="0" bottom="0.59375"/>
+						</Texture>
+					</Layer>
+				</Layers>
+				<ButtonText name="$parentText">
+					<Anchors>
+						<Anchor point="LEFT" x="7" y="0"/>
+					</Anchors>
+				</ButtonText>
+				<NormalFont style="GameFontHighlightSmall"/>
+				<HighlightTexture file="Interface\PaperDollInfoFrame\UI-Character-Tab-Highlight" alphaMode="ADD">
+					<Size x="5" y="24"/>
+					<Anchors>
+						<Anchor point="LEFT"/>
+						<Anchor point="RIGHT" x="4" y="0"/>
+					</Anchors>
+				</HighlightTexture>
+				<Scripts>
+					<OnClick>
+						AddonUsage.SortOnClick(self)
+					</OnClick>
+				</Scripts>
+			</Button>
+			
+			<Button name="$parentSortCPU" parentKey="sortCPU" text="CPU" id="4">
+				<Size x="56" y="19"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentSortMemory" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture name="$parentLeft" file="Interface\FriendsFrame\WhoFrame-ColumnTabs">
+							<Size x="5" y="19"/>
+							<Anchors>
+								<Anchor point="TOPLEFT"/>
+							</Anchors>
+							<TexCoords left="0" right="0.078125" top="0" bottom="0.59375"/>
+						</Texture>
+						<Texture name="$parentRight" file="Interface\FriendsFrame\WhoFrame-ColumnTabs">
+							<Size x="4" y="19"/>
+							<Anchors>
+								<Anchor point="TOPRIGHT"/>
+							</Anchors>
+							<TexCoords left="0.90625" right="0.96875" top="0" bottom="0.59375"/>
+						</Texture>
+						<Texture file="Interface\FriendsFrame\WhoFrame-ColumnTabs">
+							<Size x="10" y="19"/>
+							<Anchors>
+								<Anchor point="LEFT" relativeTo="$parentLeft" relativePoint="RIGHT"/>
+								<Anchor point="RIGHT" relativeTo="$parentRight" relativePoint="LEFT"/>
+							</Anchors>
+							<TexCoords left="0.078125" right="0.90625" top="0" bottom="0.59375"/>
+						</Texture>
+					</Layer>
+				</Layers>
+				<ButtonText name="$parentText">
+					<Anchors>
+						<Anchor point="LEFT" x="7" y="0"/>
+					</Anchors>
+				</ButtonText>
+				<NormalFont style="GameFontHighlightSmall"/>
+				<HighlightTexture file="Interface\PaperDollInfoFrame\UI-Character-Tab-Highlight" alphaMode="ADD">
+					<Size x="5" y="24"/>
+					<Anchors>
+						<Anchor point="LEFT"/>
+						<Anchor point="RIGHT" x="4" y="0"/>
+					</Anchors>
+				</HighlightTexture>
+				<Scripts>
+					<OnClick>
+						AddonUsage.SortOnClick(self)
+					</OnClick>
+				</Scripts>
+			</Button>
+			
+			<!-- Panel buttons at the bottom of the window -->
+			<Button name="$parentCloseButton" parentKey="closeButton" text="Close" inherits="UIPanelButtonTemplate">
+				<Size x="86" y="20"/>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" x="-4" y="4"/>
+				</Anchors>
+				<NormalFont style="GameFontNormalSmall"/>
+				<PushedFont style="GameFontHighlightSmall"/>
+				<HighlightFont style="GameFontHighlightSmall"/>
+				<Scripts>
+					<OnClick>
+						AddonUsage.ButtonOnClick(self)
+					</OnClick>
+				</Scripts>
+			</Button>
+			
+			<Button name="$parentUpdateButton" parentKey="updateButton" text="Update" inherits="UIPanelButtonTemplate">
+				<Size x="86" y="20"/>
+				<Anchors>
+					<Anchor point="BOTTOM" x="0" y="4"/>
+				</Anchors>
+				<NormalFont style="GameFontNormalSmall"/>
+				<PushedFont style="GameFontHighlightSmall"/>
+				<HighlightFont style="GameFontHighlightSmall"/>
+				<Scripts>
+					<OnClick>
+						AddonUsage.ButtonOnClick(self)
+					</OnClick>
+				</Scripts>
+			</Button>
+			
+			<Button name="$parentResetButton" parentKey="resetButton" text="Reset" inherits="UIPanelButtonTemplate">
+				<Size x="86" y="20"/>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="4" y="4"/>
+				</Anchors>
+				<NormalFont style="GameFontNormalSmall"/>
+				<PushedFont style="GameFontHighlightSmall"/>
+				<HighlightFont style="GameFontHighlightSmall"/>
+				<Scripts>
+					<OnClick>
+						AddonUsage.ButtonOnClick(self)
+					</OnClick>
+				</Scripts>
+			</Button>
+			
+			<!-- Checkbuttons at the top of the window -->
+			<CheckButton name="$parentProfilingCheckButton" parentKey="profilingCheckButton" inherits="UICheckButtonTemplate">
+				<Size x="22" y="22"/>
+				<Anchors>
+					<Anchor point="TOP" x="-40" y="-24"/>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						AddonUsage.CheckOnClick(self)
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			
+			<CheckButton name="$parentAutoCheckButton" parentKey="autoCheckButton" inherits="UICheckButtonTemplate">
+				<Size x="22" y="22"/>
+				<Anchors>
+					<Anchor point="TOP" x="-40" y="-40"/>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						AddonUsage.CheckOnClick(self)
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+		</Frames>
+		<Scripts>
+			<OnMouseDown>
+				self:StartMoving()
+			</OnMouseDown>
+			<OnMouseUp>
+				self:StopMovingOrSizing()
+			</OnMouseUp>
+		</Scripts>
+	</Frame>
+
+</Ui>
