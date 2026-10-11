@@ -6,4 +6,3 @@
 
 AddonUsage.xml
 AddonUsage.lua
-Bindings.xml

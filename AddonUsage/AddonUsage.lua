@@ -1,14 +1,14 @@
-AddonUsage = AddonUsage or CreateFrame("Frame", "AddonUsage", UIParent)
-local au = AddonUsage
+local au = AddonUsage -- created in AddonUsage.xml
 
 BINDING_HEADER_ADDONUSAGE = "AddonUsage"
-au.profiling = GetCVar("scriptProfile") == "1" 
-au.list = {} 
-au.listCache = {} 
+au.profiling = GetCVar("scriptProfile") == "1"
+au.list = {}
+tinsert(UISpecialFrames, "AddonUsage") -- close with ESC
 
 local sortKey = 2 -- 1=name, 2=memory, 4=cpu
 local sortDir = 1 -- 0=ascending order, 1=descending order
 local MAX_ADDONS_DISPLAY = 15 -- Maximum number of addons to display at once
+local ROW_HEIGHT = 16 -- must match the value in AddonUsage.xml OnVerticalScroll
 
 local function sortList(e1, e2)
     if sortDir == 1 then
@@ -37,14 +37,11 @@ end
 
 function au:BuildList()
     local list = au.list
-    local cache = au.listCache
     wipe(list)
-    wipe(cache)
     for i = 1, GetNumAddOns() do
-        local name, _, _, enabled = GetAddOnInfo(i)
-        if enabled and IsAddOnLoaded(i) then 
-            tinsert(list, {name})
-            cache[name] = 1
+        -- IsAddOnLoaded alone: an addon unchecked without /reload is still loaded and using memory
+        if IsAddOnLoaded(i) then
+            tinsert(list, {(GetAddOnInfo(i))})
         end
     end
     UpdateAddOnMemoryUsage()
@@ -88,6 +85,9 @@ function au:InitializeFrame()
     _G[self.autoCheckButton:GetName().."Text"]:SetText("Realtime updates")
     -- Set initial checkbox state
     self.profilingCheckButton:SetChecked(self.profiling)
+    -- Realtime updates on by default (OnUpdate only runs while the window is shown)
+    self.autoCheckButton:SetChecked(true)
+    self:SetScript("OnUpdate", self.OnUpdate)
     -- Hide CPU column if profiling is not enabled
     if not self.profiling then
         self.sortCPU:Hide()
@@ -97,12 +97,14 @@ function au:InitializeFrame()
     local buttons = {}
     for i = 1, MAX_ADDONS_DISPLAY do
         local button = CreateFrame("Button", "AddonUsageButton"..i, self.scrollFrame)
-        button:SetHeight(16)
-        button:SetWidth(self.scrollFrame:GetWidth() - 16)      
+        button:SetHeight(ROW_HEIGHT)
+        -- Width comes from anchors; GetWidth() may still be 0 at login while the frame is hidden
         if i == 1 then
             button:SetPoint("TOPLEFT", self.scrollFrame, "TOPLEFT", 0, 0)
+            button:SetPoint("TOPRIGHT", self.scrollFrame, "TOPRIGHT", -16, 0)
         else
-            button:SetPoint("TOPLEFT", buttons[i-1], "BOTTOMLEFT", 0, -2)
+            button:SetPoint("TOPLEFT", buttons[i-1], "BOTTOMLEFT", 0, 0)
+            button:SetPoint("TOPRIGHT", buttons[i-1], "BOTTOMRIGHT", 0, 0)
         end
         button.name = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         button.name:SetPoint("LEFT", 2, 0)
@@ -170,9 +172,10 @@ function au.CheckOnClick(self)
                 SetCVar("scriptProfile", enable and "1" or "0")
                 ReloadUI()
             end,
-            OnCancel = function() 
-                au.profilingCheckButton:Enable() 
-                au.profilingCheckButton:SetChecked(not enable)
+            -- OnHide instead of OnCancel: also fires when another popup displaces this one
+            OnHide = function()
+                au.profilingCheckButton:Enable()
+                au.profilingCheckButton:SetChecked(au.profiling)
             end
         }
         au.profilingCheckButton:Disable()
@@ -220,7 +223,7 @@ function au:UpdateList()
             button:Hide()
         end
     end
-    FauxScrollFrame_Update(self.scrollFrame, #self.list, MAX_ADDONS_DISPLAY, 16)
+    FauxScrollFrame_Update(self.scrollFrame, #self.list, MAX_ADDONS_DISPLAY, ROW_HEIGHT)
 end
 
 function AddonUsageScrollFrame_Update()
